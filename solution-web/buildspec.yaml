@@ -11,12 +11,12 @@ phases:
   build:
     commands:
       - echo Building the Docker image...
-      - docker build -t 533266998829.dkr.ecr.us-east-1.amazonaws.com/doai-donation-web .
-      - docker tag doai-donation-web:latest 533266998829.dkr.ecr.us-east-1.amazonaws.com/doai-donation-web:latest
+      - docker build -t 533266998829.dkr.ecr.us-east-1.amazonaws.com/doai-web .
+      - docker tag doai-donation-web:latest 533266998829.dkr.ecr.us-east-1.amazonaws.com/doai-web:latest
   post_build:
     commands:
       - echo Pushing the Docker image...
-      - docker push 533266998829.dkr.ecr.us-east-1.amazonaws.com/doai-donation-web:latest
+      - docker push 533266998829.dkr.ecr.us-east-1.amazonaws.com/doai-web:latest
 artifacts:
   files:
     - '**/*'
