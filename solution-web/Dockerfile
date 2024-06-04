@@ -20,7 +20,7 @@ FROM node:lts-alpine
 WORKDIR /app
 
 COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
+# COPY --from=builder /app/public ./public
 COPY --from=production-dependencies /app/node_modules ./node_modules
 COPY package.json ./
 

@@ -3,6 +3,7 @@ import axios from 'axios'
 
 const ImageAnalysis: React.FC = () => {
   const [image, setImage] = useState<File | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [labels, setLabels] = useState([])
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,11 +37,11 @@ const ImageAnalysis: React.FC = () => {
       <input type="file" accept="image/*" onChange={handleImageChange} />
       <button onClick={handleAnalyze}>Analyze Image</button>
       <ul>
-        {labels.map((label, index) => (
+        {/* {labels.map((label, index) => (
           <li key={index}>
             {label.Name} - {label.Confidence.toFixed(2)}%
           </li>
-        ))}
+        ))} */}
       </ul>
     </div>
   )
