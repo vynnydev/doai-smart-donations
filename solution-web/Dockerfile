@@ -2,18 +2,18 @@
 FROM node:lts-alpine AS builder
 WORKDIR /app
 
-COPY package.json yarn.lock ./
-RUN yarn install --production=false
+COPY package.json ./
+RUN npm install --production=false
 
 COPY . .
-RUN yarn build
+RUN npm run build
 
 # Stage 2: Install production dependencies
 FROM node:lts-alpine AS production-dependencies
 WORKDIR /app
 
-COPY package.json yarn.lock ./
-RUN yarn install --production=true
+COPY package.json ./
+RUN npm install --production=true
 
 # Stage 3: Prepare the final image
 FROM node:lts-alpine
