@@ -11,7 +11,7 @@ phases:
   build:
     commands:
       - echo Building the Docker image...
-      - docker build -t doai-donation-web solution-web/Dockerfile .
+      - docker build -t doai-donation-web -f solution-web/Dockerfile .
       - docker tag doai-donation-web:latest 533266998829.dkr.ecr.us-east-1.amazonaws.com/doai-donation-web:latest
   post_build:
     commands:
