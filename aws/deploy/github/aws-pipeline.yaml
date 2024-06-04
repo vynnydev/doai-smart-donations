@@ -1,0 +1,54 @@
+name: Deploy Frontend to AWS
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the project
+        run: npm run build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push Docker image
+        run: |
+          docker build -t doai-donate-frontend:latest .
+          docker tag doai-donate-frontend:latest ${{ steps.login-ecr.outputs.registry }}/doai-donate-frontend:latest
+          docker push ${{ steps.login-ecr.outputs.registry }}/doai-donate-frontend:latest
+
+      - name: Update ECS service
+        run: |
+          aws ecs update-service --cluster your-cluster-name --service your-service-name --force-new-deployment
+
+      - name: Sync S3 bucket
+        run: aws s3 sync ./build s3://doai-donate-frontend --delete
+
+      - name: Invalidate CloudFront cache
+        run: |
+          DISTRIBUTION_ID=your_distribution_id
+          aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*"

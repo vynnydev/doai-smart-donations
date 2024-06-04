@@ -1,0 +1,22 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 533266998829.dkr.ecr.us-east-1.amazonaws.com
+  build:
+    commands:
+      - echo Building the Docker image...
+      - docker build -t doai-donation-web .
+      - docker tag doai-donation-web:latest 533266998829.dkr.ecr.us-east-1.amazonaws.com/doai-donation-web:latest
+  post_build:
+    commands:
+      - echo Pushing the Docker image...
+      - docker push 533266998829.dkr.ecr.us-east-1.amazonaws.com/doai-donation-web:latest
+artifacts:
+  files:
+    - '**/*'
